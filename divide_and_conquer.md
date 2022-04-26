@@ -112,6 +112,61 @@ No better than high school grade algorithm
   - Alternate representations provide clue:
 
       - Sample representation
+      - $n$-degree polynomial needs $n+1$ number of samples
+      - $\{(x_0,p(x_0)) (x_1,p(x_1)),(x_2,p(x_2))...(x_n,p(x_n))\}$
+
+      - Performing addition and multiplication in sample domain is easier computationally.
+
+        - Addition : $p,q$ polynomials of degree $n$. 
+          
+          $\{(x_0,p(x_0)) (x_1,p(x_1)),(x_2,p(x_2))...(x_n,p(x_n))\} + \{(x_0,q(x_0)) (x_1,q(x_1)),(x_2,q(x_2))...(x_n,q(x_n))\} = \{(x_0,p(x_0)+q(x_0)), (x_1,p(x_1)+q(x_1)),(x_2,p(x_2+q(x_2)))...(x_n,p(x_n)+q(x_n))\}$
+          (RHS gives sample representation for the polynomial sum)
+
+        - Mutlplication : Since the product needs $2n+1$ coefficients sample each poly at $2n+1$ points and then perform sample wise multiplication
+
+          $\{(x_0,p(x_0)) (x_1,p(x_1)),(x_2,p(x_2))...(x_n,p(x_2n))\} + \{(x_0,q(x_0)) (x_1,q(x_1)),(x_2,q(x_2))...(x_n,q(x_2n))\} = \{(x_0,p(x_0)q(x_0)), (x_1,p(x_1)q(x_1)),(x_2,p(x_2)q(x_2)))...(x_n,p(x_n)q(x_n))\}$
+
+       - Addition and multiplication can be done in $O(n)$ time
+
+       - Evaluation : It is a problem of interpolations where you have to interpolate to a find the value at point $x$ tgiven the polynomial values at $\{x_0,x_1...x_n \}$. You can use interpolation formula but that at best can make it $O(n^2)$
+
+
+       ### What is Situation Now?
+          
+      ![poly_rep_comp](polynomial_representations_comparison.png)
+     (Root and Scale you can ignore as they are seldom used)
+--------------------------------------
+
+A nice scheme for multiplication given coefficient representation is to convert it to convert it to sample representation and perform multiplication on sample reprentation. Then convert the result back to coeff representation.
+
+- Conversion of coeff representation to a general sample representation takes a total of $O(n^2)$ in total. (It takes $O(n)$ time for computing one sample)
+
+- The above scheme won't work if this is the case ( Complexity will continue to be $O(n^2)$)
+
+<span style="color:orange">**!!!!SOLUTION!!!!**</span>
+
+Rather look for a peculiar set of samples which support faster to and fro conversion.
+
+- Look at a polynomial (from now on for simplicity sake assume that the degree $n$ is $2^k-1$ for some $k$, Eg $n = 7,15 ...$
+
+   $p(x) = \sum_{i=0}^{n} a_i x^i \\~~~~~~~~ = \sum_{i=even} a_j x^j + \sum_{k = odd} a_kx^k \\~~~~~~~~ = p_{even}(x^2)+xp_{odd}(x^2)$ 
+
+where 
+
+   $p_{even}(y) = $ Terms in $p(x)$ with even powers for $x$
+
+   $p_{odd}(y) = $ Terms in $p(x)$ with odd powers for $x$ with one $x$ removed from each term.
+
+   E.g.
+
+   $p(x) = 10x^7+5x^6+22x^5+11x^4+13x^3+1x^2+4x^1+21$
+
+  $p_{even}(y) = 5y^3+11y^2+1y^1+21$
+  $p_{odd}(y) = 10y^3+22y^2+13y^1+4$
+
+  <span style="color:orange">Check whether $p(x) = p_{even}(x^2)+xp_{odd}(x^2)$ holds.</span>
+
+  
 
       
 
